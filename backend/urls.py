@@ -16,68 +16,44 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.contrib.auth import views as auth_views
-from backend.usuarios.views import login_usuario, inicio
 
+from backend.usuarios.views import login_usuario, inicio
+from backend.usuarios.views_password import (
+    RecuperarPasswordView,
+    RecuperarEnviadoView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
 
 urlpatterns = [
+    path("admin/", admin.site.urls),
 
+    # Login e inicio
+    path("login/", login_usuario, name="login"),
+    path("inicio/", inicio, name="inicio"),
+
+    # Recuperación de contraseña
     path(
-        'admin/',
-        admin.site.urls
+        "recuperar/",
+        RecuperarPasswordView.as_view(),
+        name="recuperar",
     ),
 
-    # LOGIN
     path(
-        'login/',
-        login_usuario,
-        name='login'
+        "recuperar/enviado/",
+        RecuperarEnviadoView.as_view(),
+        name="recuperar_enviado",
     ),
 
-    # INICIO
     path(
-        'inicio/',
-        inicio,
-        name='inicio'
+        "recuperar/<uidb64>/<token>/",
+        PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
     ),
 
-    # RECUPERAR CONTRASEÑA
     path(
-        'recuperar/',
-        auth_views.PasswordResetView.as_view(
-            template_name='usuarios/recuperar.html',
-            email_template_name='registration/password_reset_email.html',
-            subject_template_name='registration/password_reset_subject.txt',
-            success_url='/recuperar/enviado/'
-        ),
-        name='password_reset'
-    ),
-
-    # CORREO ENVIADO
-    path(
-        'recuperar/enviado/',
-        auth_views.PasswordResetDoneView.as_view(
-            template_name='usuarios/recuperar_enviado.html'
-        ),
-        name='password_reset_done'
-    ),
-
-    # CREAR NUEVA CONTRASEÑA
-    path(
-        'recuperar/<uidb64>/<token>/',
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name='usuarios/password_reset_confirm.html',
-            success_url='/recuperar/completado/'
-        ),
-        name='password_reset_confirm'
-    ),
-
-    # CONTRASEÑA CAMBIADA
-    path(
-        'recuperar/completado/',
-        auth_views.PasswordResetCompleteView.as_view(
-            template_name='usuarios/password_reset_complete.html'
-        ),
-        name='password_reset_complete'
+        "recuperar/completado/",
+        PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
     ),
 ]
