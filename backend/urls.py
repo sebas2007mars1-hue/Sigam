@@ -1,18 +1,16 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
-from usuarios.views_password import (
+from backend.usuarios.views_password import (
     RecuperarPasswordView,
     RecuperarEnviadoView,
     PasswordResetConfirmView,
     PasswordResetCompleteView,
+    recuperar_password_api,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
-    # Rutas existentes del proyecto
-    path("", include("usuarios.urls")),
 
     # Recuperación de contraseña
     path(
@@ -37,5 +35,12 @@ urlpatterns = [
         "recuperar/completado/",
         PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
+    ),
+
+    # API para Angular
+    path(
+        "api/recuperar/",
+        recuperar_password_api,
+        name="api_recuperar",
     ),
 ]

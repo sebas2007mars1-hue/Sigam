@@ -1,0 +1,55 @@
+<div class="recuperar-container">
+
+  <div class="recuperar-card">
+
+    <div class="logo">
+      SIGAM
+    </div>
+
+    <h1>Recuperar contraseña</h1>
+
+    <p class="descripcion">
+      Ingresa tu correo electrónico y te enviaremos un enlace
+      para recuperar tu contraseña.
+    </p>
+
+    <form [formGroup]="recuperarForm" (ngSubmit)="onSubmit()">
+
+      <div class="campo">
+
+        <label for="email">
+          Correo electrónico
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="usuario@sigam.com"
+        />
+
+        <div
+          class="error"
+          *ngIf="isInvalid()"
+        >
+          Ingresa un correo electrónico válido.
+        </div>
+
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="isLoading"
+      >
+        {{ isLoading ? 'Enviando...' : 'Continuar' }}
+      </button>
+      
+      <p class="mensaje" *ngIf="mensaje">
+  {{ mensaje }}
+</p>
+
+    </form>
+
+  </div>
+
+</div>
